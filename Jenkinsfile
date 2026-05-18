@@ -32,7 +32,7 @@ pipeline {
                 -H "Authorization: Bearer %SEEZO_API_TOKEN%" ^
                 -H "Accept: application/json" ^
                 -F "feature_name=threatmodelling" ^
-                -F "resources=@threatmodel.png"
+                -F "resources=@\\"SAMPLE - SAMPLE - Order Processing Flow - HLD_DFD.png\\""
                 '''
             }
         }
