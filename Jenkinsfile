@@ -26,13 +26,15 @@ pipeline {
             }
         }
 
-        stage('Upload PNG to Seezo') {
+        stage('Upload Architecture to Seezo') {
             steps {
 
                 bat '''
                 curl -X POST "%SEEZO_BASE_URL%/api/v1/projects/%PROJECT_ID%/assessments/" ^
                 -H "Authorization: Bearer %SEEZO_API_TOKEN%" ^
                 -H "Accept: application/json" ^
+                -F "feature_name=ThreatModelAssessment" ^
+                -F "resources_data=[{\\"type\\":\\"diagram\\",\\"classification\\":\\"primary\\"}]" ^
                 -F "file_0=@HLD_DFD.png"
                 '''
             }
