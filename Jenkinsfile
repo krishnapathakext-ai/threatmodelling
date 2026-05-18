@@ -35,7 +35,7 @@ pipeline {
                 -H "Accept: application/json" ^
                 -F "feature_name=threatmodelling" ^
                 -F "resources_data=[{\\"type\\":\\"image\\",\\"classification\\":\\"primary\\"}]" ^
-                -F "files=@\\"SAMPLE - SAMPLE - Order Processing Flow - HLD_DFD.png\\""
+                -F "files=@\\"HLD_DFD.png\\""
                 '''
             }
         }
