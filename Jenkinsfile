@@ -2,10 +2,11 @@ pipeline {
     agent any
 
     environment {
-        SEEZO_API_TOKEN = credentials('OyWhrWtWpEFhSVPFtWtWnDbd-3c2TIM6WpcpWjjN2Jc')
 
         SEEZO_BASE_URL = 'https://app.seezo.io'
         PROJECT_ID     = '65bd495c-a694-4443-a97e-067b8d4ccac7'
+
+        SEEZO_API_TOKEN = 'OyWhrWtWpEFhSVPFtWtWnDbd-3c2TIM6WpcpWjjN2Jc'
     }
 
     stages {
