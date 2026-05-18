@@ -25,6 +25,22 @@ pipeline {
                 bat 'dir'
             }
         }
+stages {
+
+        stage('Checkout') {
+            steps {
+
+                git branch: 'main',
+                url: 'https://github.com/Krishna-Gopal-Pathak/threatmodelling.git'
+            }
+        }
+
+        stage('Verify Files') {
+            steps {
+
+                bat 'dir'
+            }
+        }
 
         stage('Upload Architecture to Seezo') {
             steps {
@@ -33,9 +49,9 @@ pipeline {
                 curl -X POST "%SEEZO_BASE_URL%/api/v1/projects/%PROJECT_ID%/assessments/" ^
                 -H "Authorization: Bearer %SEEZO_API_TOKEN%" ^
                 -H "Accept: application/json" ^
-                -F "feature_name=ThreatModelAssessment" ^
-                -F "resources_data=[{\\"type\\":\\"diagram\\",\\"classification\\":\\"primary\\"}]" ^
-                -F "file_0=@HLD_DFD.png"
+                -F "feature_name=threatmodelling" ^
+                -F "resources_data=[{\\"type\\":\\"image\\",\\"classification\\":\\"primary\\"}]" ^
+                -F "files=@\\"SAMPLE - SAMPLE - Order Processing Flow - HLD_DFD.png\\""
                 '''
             }
         }
