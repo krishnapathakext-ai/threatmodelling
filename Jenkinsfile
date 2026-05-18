@@ -5,7 +5,8 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://github.com/Krishna-Gopal-Pathak/threatmodelling.git'
+                git branch: 'main',
+                url: 'https://github.com/Krishna-Gopal-Pathak/threatmodelling.git'
             }
         }
 
