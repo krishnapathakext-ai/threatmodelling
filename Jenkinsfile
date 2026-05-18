@@ -9,10 +9,11 @@ pipeline {
         SEEZO_API_TOKEN = 'OyWhrWtWpEFhSVPFtWtWnDbd-3c2TIM6WpcpWjjN2Jc'
     }
 
-    stages {
+   stages {
 
         stage('Checkout') {
             steps {
+
                 git branch: 'main',
                 url: 'https://github.com/Krishna-Gopal-Pathak/threatmodelling.git'
             }
@@ -20,6 +21,7 @@ pipeline {
 
         stage('Verify Files') {
             steps {
+
                 bat 'dir'
             }
         }
@@ -32,15 +34,30 @@ pipeline {
                 -H "Authorization: Bearer %SEEZO_API_TOKEN%" ^
                 -H "Accept: application/json" ^
                 -F "feature_name=threatmodelling" ^
-                -F "resources=@\\"SAMPLE - SAMPLE - Order Processing Flow - HLD_DFD.png\\""
+                -F "resources_data=[{\\"type\\":\\"image\\",\\"classification\\":\\"primary\\"}]" ^
+                -F "files=@\\"SAMPLE - SAMPLE - Order Processing Flow - HLD_DFD.png\\""
                 '''
             }
         }
 
         stage('Completed') {
             steps {
+
                 echo 'Seezo Integration Completed Successfully'
             }
+        }
+    }
+
+    post {
+
+        success {
+
+            echo 'Pipeline executed successfully.'
+        }
+
+        failure {
+
+            echo 'Pipeline failed.'
         }
     }
 }
