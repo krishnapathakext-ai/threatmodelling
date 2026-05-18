@@ -9,7 +9,17 @@ pipeline {
         SEEZO_API_TOKEN = 'OyWhrWtWpEFhSVPFtWtWnDbd-3c2TIM6WpcpWjjN2Jc'
     }
 
-   stage('Verify Files') {
+   stages {
+
+        stage('Checkout') {
+            steps {
+
+                git branch: 'main',
+                url: 'https://github.com/Krishna-Gopal-Pathak/threatmodelling.git'
+            }
+        }
+
+        stage('Verify Files') {
             steps {
 
                 bat 'dir'
