@@ -4,22 +4,12 @@ pipeline {
     environment {
 
         SEEZO_BASE_URL = 'https://app.seezo.io'
-        PROJECT_ID     = '65bd495c-a694-4443-a97e-067b8d4ccac7'
+        PROJECT_ID     = '2a473597-85c8-41ae-945f-74d9c85e9188'
 
         SEEZO_API_TOKEN = 'OyWhrWtWpEFhSVPFtWtWnDbd-3c2TIM6WpcpWjjN2Jc'
     }
 
-   stages {
-
-        stage('Checkout') {
-            steps {
-
-                git branch: 'main',
-                url: 'https://github.com/Krishna-Gopal-Pathak/threatmodelling.git'
-            }
-        }
-
-        stage('Verify Files') {
+   stage('Verify Files') {
             steps {
 
                 bat 'dir'
@@ -33,9 +23,8 @@ pipeline {
                 curl -X POST "%SEEZO_BASE_URL%/api/v1/projects/%PROJECT_ID%/assessments/" ^
                 -H "Authorization: Bearer %SEEZO_API_TOKEN%" ^
                 -H "Accept: application/json" ^
-                -F "feature_name=threatmodelling" ^
-                -F "resources_data=[{\\"type\\":\\"image\\",\\"classification\\":\\"primary\\"}]" ^
-                -F "files=@\\"HLD_DFD.png\\""
+                -F "assessment_name=ThreatModelAssessment" ^
+                -F "file_0=@HLD_DFD.png"
                 '''
             }
         }
