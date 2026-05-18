@@ -5,7 +5,6 @@ pipeline {
 
         SEEZO_BASE_URL = 'https://app.seezo.io'
         PROJECT_ID     = '2a473597-85c8-41ae-945f-74d9c85e9188'
-
         SEEZO_API_TOKEN = 'OyWhrWtWpEFhSVPFtWtWnDbd-3c2TIM6WpcpWjjN2Jc'
     }
 
