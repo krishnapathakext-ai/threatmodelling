@@ -36,7 +36,7 @@ pipeline {
                     -H "Accept: application/json" ^
                     -F "feature_name=ThreatModelAssessment" ^
                     -F "resources_data=[{\\"type\\":\\"file_upload\\",\\"file_id\\":\\"design-doc\\",\\"classification\\":\\"primary\\"}]" ^
-                    -F "design-doc=@HLD_DFD.pdf" ^
+                    -F "design-doc=@HLD_DFD.png" ^
                     -o response.json
                     '''
 
