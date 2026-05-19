@@ -25,7 +25,7 @@ pipeline {
             }
         }
 
-        stage('Upload Architecture to Seezo') {
+        stage('Upload Architecture PDF to Seezo') {
             steps {
 
                 bat '''
@@ -33,8 +33,8 @@ pipeline {
                 -H "Authorization: Bearer %SEEZO_API_TOKEN%" ^
                 -H "Accept: application/json" ^
                 -F "feature_name=ThreatModelAssessment" ^
-                -F "resources_data=[{\\"identifier\\":\\"HLD_DFD\\",\\"type\\":\\"image\\",\\"classification\\":\\"primary\\"}]" ^
-                -F "HLD_DFD=@HLD_DFD.png"
+                -F "resources_data=[{\\"type\\":\\"file_upload\\",\\"file_id\\":\\"design-doc\\",\\"classification\\":\\"primary\\"}]" ^
+                -F "design-doc=@HLD_DFD.pdf"
                 '''
             }
         }
@@ -50,12 +50,10 @@ pipeline {
     post {
 
         success {
-
             echo 'Pipeline executed successfully.'
         }
 
         failure {
-
             echo 'Pipeline failed.'
         }
     }
