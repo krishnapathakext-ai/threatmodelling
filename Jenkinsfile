@@ -25,17 +25,68 @@ pipeline {
             }
         }
 
-        stage('Upload Architecture PDF to Seezo') {
+        stage('Create Assessment') {
             steps {
 
-                bat '''
-                curl --fail -v -X POST "%SEEZO_BASE_URL%/api/v1/projects/%PROJECT_ID%/assessments/" ^
+                script {
+
+                    bat '''
+                    curl --fail -X POST "%SEEZO_BASE_URL%/api/v1/projects/%PROJECT_ID%/assessments/" ^
+                    -H "Authorization: Bearer %SEEZO_API_TOKEN%" ^
+                    -H "Accept: application/json" ^
+                    -F "feature_name=ThreatModelAssessment" ^
+                    -F "resources_data=[{\\"type\\":\\"file_upload\\",\\"file_id\\":\\"design-doc\\",\\"classification\\":\\"primary\\"}]" ^
+                    -F "design-doc=@HLD_DFD.pdf" ^
+                    -o response.json
+                    '''
+
+                    def response = readFile('response.json')
+
+                    echo "Create Assessment Response:"
+                    echo response
+
+                    def matcher = response =~ /"assessment_id":"([^"]+)"/
+
+                    if (matcher) {
+
+                        env.ASSESSMENT_ID = matcher[0][1]
+
+                        echo "Assessment ID: ${env.ASSESSMENT_ID}"
+
+                    } else {
+
+                        error("Failed to extract assessment_id from response")
+                    }
+                }
+            }
+        }
+
+        stage('Wait Before Polling') {
+            steps {
+
+                sleep time: 20, unit: 'SECONDS'
+            }
+        }
+
+        stage('Check Assessment Progress') {
+            steps {
+
+                bat """
+                curl --fail -X GET "%SEEZO_BASE_URL%/api/v1/projects/%PROJECT_ID%/assessments/%ASSESSMENT_ID%/progress/" ^
                 -H "Authorization: Bearer %SEEZO_API_TOKEN%" ^
-                -H "Accept: application/json" ^
-                -F "feature_name=ThreatModelAssessment" ^
-                -F "resources_data=[{\\"type\\":\\"file_upload\\",\\"file_id\\":\\"design-doc\\",\\"classification\\":\\"primary\\"}]" ^
-                -F "design-doc=@HLD_DFD.pdf"
-                '''
+                -H "Accept: application/json"
+                """
+            }
+        }
+
+        stage('Get Assessment Details') {
+            steps {
+
+                bat """
+                curl --fail -X GET "%SEEZO_BASE_URL%/api/v1/projects/%PROJECT_ID%/assessments/%ASSESSMENT_ID%/" ^
+                -H "Authorization: Bearer %SEEZO_API_TOKEN%" ^
+                -H "Accept: application/json"
+                """
             }
         }
 
@@ -50,10 +101,12 @@ pipeline {
     post {
 
         success {
+
             echo 'Pipeline executed successfully.'
         }
 
         failure {
+
             echo 'Pipeline failed.'
         }
     }
