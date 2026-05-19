@@ -29,11 +29,11 @@ pipeline {
             steps {
 
                 bat '''
-                curl -v -X POST "%SEEZO_BASE_URL%/api/v1/projects/%PROJECT_ID%/assessments/" ^
+                curl --fail -v -X POST "%SEEZO_BASE_URL%/api/v1/projects/%PROJECT_ID%/assessments/" ^
                 -H "Authorization: Bearer %SEEZO_API_TOKEN%" ^
                 -H "Accept: application/json" ^
                 -F "feature_name=ThreatModelAssessment" ^
-                -F "resources_data=[{\\"identifier\\":\\"HLD_DFD\\",\\"type\\":\\"dfd\\",\\"classification\\":\\"primary\\"}]" ^
+                -F "resources_data=[{\\"identifier\\":\\"HLD_DFD\\",\\"type\\":\\"image\\",\\"classification\\":\\"primary\\"}]" ^
                 -F "HLD_DFD=@HLD_DFD.png"
                 '''
             }
