@@ -4,8 +4,8 @@ pipeline {
     environment {
 
         SEEZO_BASE_URL = 'https://app.seezo.io'
-        PROJECT_ID     = '2a473597-85c8-41ae-945f-74d9c85e9188'
-        SEEZO_API_TOKEN = '1C9eRjwzyvYoppXrOfibncss-C3jx6Q76TYQtRsqXiY'
+        PROJECT_ID     = ''
+        SEEZO_API_TOKEN = ''
     }
 
     stages {
