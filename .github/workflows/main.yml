@@ -1,3 +1,42 @@
 name: Deploy to EC2
 
 on:
+push:
+branches:
+- main
+
+jobs:
+deploy:
+runs-on: ubuntu-latest
+
+```
+steps:
+  - name: Checkout Repository
+    uses: actions/checkout@v4
+
+  - name: Setup SSH Key
+    run: |
+      echo "${{ secrets.EC2_SSH_KEY }}" > private_key.pem
+      chmod 400 private_key.pem
+
+  - name: Copy index.html to EC2
+    run: |
+      scp -o StrictHostKeyChecking=no \
+          -i private_key.pem \
+          index.html \
+          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/tmp/index.html
+
+  - name: Deploy to Nginx Web Root
+    run: |
+      ssh -o StrictHostKeyChecking=no \
+          -i private_key.pem \
+          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+
+        sudo mkdir -p /var/www/html
+        sudo mv /tmp/index.html /var/www/html/index.html
+
+        sudo systemctl enable nginx
+        sudo systemctl restart nginx
+
+      EOF
+```
