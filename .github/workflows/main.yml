@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy Static Website to EC2
 
 on:
 push:
@@ -14,29 +14,25 @@ steps:
   - name: Checkout Repository
     uses: actions/checkout@v4
 
-  - name: Setup SSH Key
-    run: |
-      echo "${{ secrets.EC2_SSH_KEY }}" > private_key.pem
-      chmod 400 private_key.pem
+  - name: Set Permission on Key
+    run: chmod 400 key.pem
 
   - name: Copy index.html to EC2
     run: |
       scp -o StrictHostKeyChecking=no \
-          -i private_key.pem \
-          index.html \
-          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/tmp/index.html
+        -i key.pem \
+        index.html \
+        ubuntu@ec2-65-0-125-210.ap-south-1.compute.amazonaws.com:/tmp/index.html
 
-  - name: Deploy to Nginx Web Root
+  - name: Deploy Website
     run: |
       ssh -o StrictHostKeyChecking=no \
-          -i private_key.pem \
-          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-
-        sudo mkdir -p /var/www/html
-        sudo mv /tmp/index.html /var/www/html/index.html
-
-        sudo systemctl enable nginx
-        sudo systemctl restart nginx
-
+        -i key.pem \
+        ubuntu@ec2-65-0-125-210.ap-south-1.compute.amazonaws.com << 'EOF'
+          sudo apt-get update
+          sudo apt-get install -y nginx
+          sudo mv /tmp/index.html /var/www/html/index.html
+          sudo systemctl enable nginx
+          sudo systemctl restart nginx
       EOF
 ```
